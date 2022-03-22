@@ -1,34 +1,35 @@
 import java.text.DecimalFormat;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class IntegralSolver {
 
     public static void main(String[] args) {
-
         DecimalFormat df = new DecimalFormat("###.#####");
 
-        try (Scanner obj = new Scanner(System.in)) {
-            System.out.println("Please enter the A bound: ");
-            double boundA = obj.nextDouble();
+        double boundA = Double.parseDouble(JOptionPane.showInputDialog("Enter your A bound"));
+    
+        double boundB = Double.parseDouble(JOptionPane.showInputDialog("Enter your B bound"));
+    
+        int intervals = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of intervals you want to approximate to"));
 
-            System.out.println("Please enter the B bound: ");
-            double boundB = obj.nextDouble();
+        double deltaX = (boundB - boundA)/ intervals;
 
-            System.out.println("Please enter the amount of intervals you would like to approximate to: ");
-            int intervals = obj.nextInt();
+        if((SimpsonsApproximation(deltaX, intervals, boundA )== -.0001)){
+            JOptionPane.showMessageDialog(null, "A bound: " + boundA + '\n' + " B bound " + boundB  + '\n' +  intervals + " intervals" + '\n' + 
+        "Delta x" + deltaX + '\n' + "The final answer to this midpoint approximation is " + df.format(approximateIntegral(deltaX,intervals, boundA))
+        + "\n" + "The final trapezoidal approximation is " + df.format(trapezoidApproximation(deltaX,intervals,boundA)) + 
+        '\n' + "There are an odd amount of subintervals therfore Simpsons method of integration cannot be used."); 
+        }else{
+            JOptionPane.showMessageDialog(null, "A bound: " + boundA + '\n' + " B bound " + boundB  + '\n' +  intervals + " intervals" + '\n' + 
+        "Delta x" + deltaX + '\n' + "The final answer to this midpoint approximation is " + df.format(approximateIntegral(deltaX,intervals, boundA))
+        + "\n" + "The final trapezoidal approximation is " + df.format(trapezoidApproximation(deltaX,intervals,boundA)) + 
+        '\n' + "The final simpsons approximation is " + SimpsonsApproximation(deltaX, intervals, boundA)); 
+        }
 
-            double deltaX = (boundB - boundA)/ intervals;
-      
-
-            System.out.println("The final trapezoidal approximation is " + df.format(trapezoidApproximation(deltaX,intervals,boundA)));
-            System.out.println("The final answer to this midpoint approximation is " + df.format(approximateIntegral(deltaX,intervals, boundA)));
-            
-            if((SimpsonsApproximation(deltaX, intervals, boundA )== -.0001)){
-                System.out.println("There are an odd amount of subintervals therfore Simpsons method of integration cannot be used.");
-            }else{
-                System.out.println("The final simpsons approximation is " + SimpsonsApproximation(deltaX, intervals, boundA));
-            }
-        } 
+        System.out.println("The final trapezoidal approximation is " + df.format(trapezoidApproximation(deltaX,intervals,boundA)));
+        System.out.println("The final answer to this midpoint approximation is " + df.format(approximateIntegral(deltaX,intervals, boundA)));
+        
      }
    
     public static double approximateIntegral(double dx, int intervals, double a_bound){
